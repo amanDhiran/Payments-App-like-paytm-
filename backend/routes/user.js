@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 
 const { User } = require("../models/user.model");
 const authMiddleware = require("../middlewares/authMiddleware");
+const Account = require("../models/account.model");
 const router = express.Router();
 
 const signUpBody = z.object({
@@ -49,6 +50,14 @@ router.post("/signup", async(req, res) => {
         lastName: req.body.lastName
     })
     const userId = user._id
+
+    //Create new account
+
+    await Account.create({
+      userId,
+      balance: 1 + Math.random() * 10000
+    })
+
     const token = jwt.sign({userId}, process.env.JWT_SECRET)
 
     res.json({
@@ -106,6 +115,14 @@ router.get("/bulk", async (req, res) => {
     }]
   })
   
+  res.json({
+    user: users.map(user => ({
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      _id: this.user._id
+    }))
+  })
 })
 
 module.exports = router;
