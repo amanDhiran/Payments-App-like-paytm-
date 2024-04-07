@@ -90,7 +90,20 @@ router.post("/signin", async (req, res) => {
     })
 })
 
-router.put("/", authMiddleware, async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
+  const user = await User.findOne({
+    _id: req.userId
+  })
+  res.json({
+    user:{
+    userName: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
+      _id: user._id
+  }})
+})
+
+router.put("/update", authMiddleware, async (req, res) => {
   const parsedBody = updateBody.safeParse(req.body)
   if(!parsedBody.success){
     return res.status(411).json({
@@ -99,6 +112,9 @@ router.put("/", authMiddleware, async (req, res) => {
   }
 
   await User.findOneAndUpdate({_id: req.userId}, req.body)
+  res.json({
+    message: "updated successfully"
+  })
 })
 
 router.get("/bulk", async (req, res) => {
@@ -116,11 +132,11 @@ router.get("/bulk", async (req, res) => {
   })
   
   res.json({
-    user: users.map(user => ({
+    users: users.map(user => ({
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
-      _id: this.user._id
+      _id: user._id
     }))
   })
 })
