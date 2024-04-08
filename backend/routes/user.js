@@ -124,8 +124,8 @@ router.get("/bulk",authMiddleware, async (req, res) => {
     $or: [{
       firstName: {
         $regex: filter 
-      },
-      lastName: {
+      }},
+      {lastName: {
         $regex: filter
       }
     }]

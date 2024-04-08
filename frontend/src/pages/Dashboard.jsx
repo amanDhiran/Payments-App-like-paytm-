@@ -4,7 +4,7 @@ function Dashboard() {
   const [user, setUser] = useState({});
   const [balance, setBalance] = useState()
   const [users, setUsers] = useState([])
-  const [filter, setFilter] = useState()
+  const [filter, setFilter] = useState("")
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,6 +84,7 @@ function Dashboard() {
           }} 
           placeholder="Search users..."/>
         {/* user list */}
+        
         {users?.map((user) => (<div className="flex flex-col gap-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
