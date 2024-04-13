@@ -141,4 +141,32 @@ router.get("/bulk",authMiddleware, async (req, res) => {
   })
 })
 
+router.get("/me", async (req, res) => {
+  const authHeader = req.headers.authorization
+
+    if(!authHeader || !authHeader.startsWith('bearer ')){
+        return res.json({
+          isLoggedIn: false,
+          message: "user is not authenticated"
+        })
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        if(decoded){
+          return res.json({
+                isLoggedIn: true,
+                message: "user is logged in"
+              })
+        }
+    } catch (error) {
+        return res.json({
+          isLoggedIn: false,
+          message: "user is not authenticated"
+        })
+    }
+})
+
 module.exports = router;

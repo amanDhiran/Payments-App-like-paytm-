@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {useNavigate} from 'react-router-dom'
+
 function Dashboard() {
   const [user, setUser] = useState({});
   const [balance, setBalance] = useState()
   const [users, setUsers] = useState([])
   const [filter, setFilter] = useState("")
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +44,8 @@ function Dashboard() {
     fetchData();
   }, []);
 
+
+  //debouncing
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -93,7 +99,10 @@ function Dashboard() {
               </div>
               <p>{user.firstName}</p>
             </div>
-            <button className="text-sm font-medium bg-secondary text-primary h-10 rounded-md hover:bg-hover px-3">
+            <button 
+              className="text-sm font-medium bg-secondary text-primary h-10 rounded-md hover:bg-hover px-3"
+              onClick={() => navigate(`/send?id=${user._id}&name=${user.firstName}`)}
+              >
               Send Money
             </button>
           </div>
